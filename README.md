@@ -168,5 +168,5 @@ Para que o upload de arquivos funcione, é necessário configurar as políticas 
 
 #### 3.3 Instale as dependências
 	git clone https://github.com/ElyahuMendesdaSilva/api_supabase
-	cd API_TESTER
+	cd api_supabase
 	pip install -r requirements.txt  
