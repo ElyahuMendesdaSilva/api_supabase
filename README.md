@@ -1,172 +1,159 @@
-# API Manager Dashboard - Supabase Integration
-Dashboard completo para gerenciamento de usuários, serviços, cidades e categorias com upload de arquivos para o Supabase Storage.
-## Funcionalidades Implementadas
+# Documentação do Sistema: API Manager Dashboard
 
-### Backend (FastAPI)
+Este projeto adota uma arquitetura desacoplada (**Headless**), onde o Backend (API) e o Frontend (Interface) residem em repositórios Git distintos e se comunicam via protocolo HTTP/REST.
 
-- CRUD completo de Cidades
-- CRUD completo de Categorias
-- CRUD completo de Usuários
-- CRUD completo de Serviços
-- Upload de avatar para usuários (Supabase Storage)
-- Upload de logo para serviços (Supabase Storage)
-- Filtragem de serviços por cidade e categoria
-- Remoção de arquivos do storage quando excluídos
-- Validações e tratamento de erros
-- CORS configurado
-### Frontend (HTML/CSS/JS)
+## Estrutura dos Repositórios
 
-- Dashboard responsivo com tema dark
-- Interface para todas as operações CRUD
-- Upload de arquivos com preview
-- Filtragem e busca em tempo real
-- Feedback visual para usuário
-- Design moderno e intuitivo
-  
-## Configuração do Ambiente
+| **Componente**     | **Repositório**                                            | **Tecnologias**           | **Hospedagem Sugerida**       |
+| ------------------ | ---------------------------------------------------------- | ------------------------- | ----------------------------- |
+| **Backend (API)**  | `https://github.com/ElyahuMendesdaSilva/api_supabase_back` | Python, FastAPI, Supabase | Render, Railway, Fly.io       |
+| **Frontend (Web)** | `https://github.com/ElyahuMendesdaSilva/api_supabase`      | HTML5, CSS3, JS Vanilla   | Vercel, Netlify, GitHub Pages |
 
-### 1. Pré-requisitos
+---
+
+## Parte 1: Configuração do Backend (API)
+
+Este repositório contém a lógica de servidor, conexão com banco de dados e regras de upload.
+
+### Pré-requisitos
+
 - Python 3.8+
-- Node.js (apenas para servir frontend estático)
-- Conta no Supabase
-### 2. Configuração do Supabase
-#### 2.1 Criar um novo projeto
-1. Acesse [Supabase](https://supabase.com) e crie uma conta (se necessário).
-2. Clique em "New project".
-3. Preencha os detalhes do projeto (nome, senha, região) e clique em "Create new project".
-#### 2.2 Configurar o banco de dados
-Após a criação do projeto, acesse o editor SQL (ícone SQL no menu lateral) e execute o seguinte script:
+    
+- Conta no Supabase (Projeto criado com buckets `avatars` e `logos`).
+    
 
-```sql
--- Tabela de cidades
+### Instalação Local
 
-CREATE TABLE cities (
+1. **Clone o repositório do Backend:**
+    
+    Bash
+    
+    ```
+    git clone https://github.com/ElyahuMendesdaSilva/api_supabase_back
+    cd api_supabase_back
+    ```
+    
+2. **Crie o ambiente virtual e instale as dependências:**
+    
+    Bash
+    
+    ```
+    python -m venv venv
+    # Windows:
+    venv\scripts\activate
+    # Linux/Mac:
+    source venv/bin/activate
+    
+    pip install -r requirements.txt
+    ```
+    
+3. Variáveis de Ambiente (.env):
+    
+    Crie um arquivo .env na raiz e preencha com suas credenciais do Supabase:
+    
+    Fragmento do código
+    
+    ```
+    SUPABASE_URL=https://seu-projeto.supabase.co
+    SUPABASE_SERVICE_ROLE_KEY=sua-chave-secreta
+    PORT=8000
+    ```
+    
+4. **Rodar a API:**
+    
+    Bash
+    
+    ```
+    python main.py
+    ```
+    
+    _A API estará ativa em `http://localhost:8000`._
+    
 
-    id SERIAL PRIMARY KEY,
+---
 
-    name TEXT NOT NULL,
+## Parte 2: Configuração do Frontend (Client)
 
-    state TEXT NOT NULL,
+Este repositório contém apenas os arquivos estáticos da interface. Ele consome a API configurada acima.
 
-    created_at TIMESTAMP DEFAULT NOW()
+### Configuração da URL da API
 
-);
+O Frontend possui um sistema de detecção automática de ambiente no arquivo `app.js`.
 
-  
+- **Desenvolvimento:** Se você abrir o site em `localhost`, ele tentará conectar em `http://localhost:8000`.
+    
+- **Produção:** Se o site estiver hospedado (ex: Vercel), ele conectará na URL de produção definida.
+    
 
--- Tabela de categorias
+> **Importante:** Antes de subir para produção, verifique a linha 3 do arquivo `app.js` e insira a URL do seu Backend hospedado:
+> 
+> JavaScript
+> 
+> ```
+> const API_BASE = window.location.hostname.includes('localhost') 
+>   ? 'http://localhost:8000' 
+>   : 'https://sua-api-no-render.com'; // <--- ATUALIZE AQUI
+> ```
 
-CREATE TABLE categories (
+### Instalação e Execução
 
-    id SERIAL PRIMARY KEY,
-
-    name TEXT NOT NULL,
-
-    created_at TIMESTAMP DEFAULT NOW()
-
-);
-
-  
-
--- Tabela de usuários
-
-CREATE TABLE users (
-
-    id SERIAL PRIMARY KEY,
-
-    name TEXT NOT NULL,
-
-    email TEXT UNIQUE NOT NULL,
-
-    avatar_url TEXT,
-
-    created_at TIMESTAMP DEFAULT NOW()
-
-);
-
-  
-
--- Tabela de serviços
-
-CREATE TABLE services (
-
-    id SERIAL PRIMARY KEY,
-
-    name TEXT NOT NULL,
-
-    description TEXT,
-
-    city_id INTEGER REFERENCES cities(id) ON DELETE RESTRICT,
-
-    category_id INTEGER REFERENCES categories(id) ON DELETE RESTRICT,
-
-    logo_url TEXT,
-
-    created_at TIMESTAMP DEFAULT NOW()
-
-);
-````
-
-#### 2.3 Criar os buckets no Storage
-
-1. No menu lateral, clique em "Storage".
-2. Clique em "Create a new bucket".
-3. Crie dois buckets com os nomes:
-    - `avatars` (para fotos de perfil)
+1. **Clone o repositório do Frontend:**
+    
+    Bash
+    
+    ```
+    git clone https://github.com/seu-usuario/nome-do-repo-frontend.git
+    cd nome-do-repo-frontend
+    ```
+    
+2. Executar Localmente:
+    
+    Como é HTML estático, você precisa de um servidor HTTP simples para evitar erros de CORS (não abra o arquivo direto clicando duas vezes).
+    
+    - **Opção com Python:**
         
-    - `logos` (para logos de serviços)
+        Bash
         
-#### 2.4 Configurar políticas de acesso nos buckets
-Para que o upload de arquivos funcione, é necessário configurar as políticas de segurança (Row Level Security) em cada bucket.
-**Para o bucket `logos`:**
-
-1. Clique no bucket `logos`.
-    
-2. Vá para a aba "Policies".
-    
-3. Clique em "New Policy".
-    
-4. Selecione "Create a policy from scratch".
-    
-5. Configure a política para permitir todas as operações (SELECT, INSERT, UPDATE, DELETE):
-    
-    - **Policy Name**: `Allow all operations on logos`
+        ```
+        python -m http.server 5500
+        ```
         
-    - **Allowed Operations**: Selecione todas (SELECT, INSERT, UPDATE, DELETE)
+    - Opção com VSCode:
         
-    - **Policy Definition**: `bucket_id = 'logos'`
+        Instale a extensão "Live Server" e clique em "Go Live".
         
-6. Clique em "Save Policy".
-
-**Para o bucket `avatars`:**
-
-1. Clique no bucket `avatars`.
-    
-2. Siga os mesmos passos acima, criando uma política com o nome `Allow all operations on avatars`.
+3. **Acesse:** `http://localhost:5500` (ou a porta indicada).
     
 
-**Nota:** Em um ambiente de produção, é recomendado criar políticas mais restritivas, mas para desenvolvimento e testes, a política acima é suficiente.
+---
 
-#### 2.5 Obter as credenciais do projeto
+## Guia de Deploy (Publicação)
 
-1. No menu lateral, clique em "Settings" (ícone de engrenagem).
+Como os repositórios são separados, o deploy é feito de forma independente.
+
+### 1. Deploy do Backend
+
+Recomendado: **Render.com** (Web Service)
+
+1. Conecte o repositório do Backend no Render.
     
-2. Selecione "API".
+2. Runtime: **Python 3**.
     
-3. Anote a `URL` (será a `SUPABASE_URL`) e a `service_role key` (será a `SUPABASE_SERVICE_ROLE_KEY`).
+3. Build Command: `pip install -r requirements.txt`.
+    
+4. Start Command: `python main.py` (ou `uvicorn main:app --host 0.0.0.0 --port $PORT`).
+    
+5. **Environment Variables:** Adicione `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` nas configurações do painel do Render.
     
 
-### 3. Instalação do Backend
+### 2. Deploy do Frontend
 
-#### 3.1. Crie um ambiente virtual
-	python -m venv venv
-#### 3.2 Ative o ambiente virtual
-##### Windows:
-	venv\scripts\activate
-##### Linux/Mac:
-	source venv/bin/activate
+Recomendado: **Vercel** ou **Netlify**
 
-#### 3.3 Instale as dependências
-	git clone https://github.com/ElyahuMendesdaSilva/api_supabase
-	cd api_supabase
-	pip install -r requirements.txt  
+1. Conecte o repositório do Frontend.
+    
+2. Como não há build step (é JS puro), basta manter as configurações padrão.
+    
+3. O deploy será instantâneo.
+    
+4. **Atenção:** Certifique-se de que atualizou o `app.js` com a URL do backend gerada no passo anterior.
