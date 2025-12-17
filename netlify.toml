@@ -1,0 +1,14 @@
+[build]
+  publish = "."  # Pasta onde estão seus arquivos estáticos
+  command = ""   # Não precisa de comando de build
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Configurações de cabeçalhos CORS
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
