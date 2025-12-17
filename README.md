@@ -1,4 +1,4 @@
-# Documentação do Sistema: API Manager Dashboard
+# API Manager Dashboard
 
 Este projeto adota uma arquitetura desacoplada (**Headless**), onde o Backend (API) e o Frontend (Interface) residem em repositórios Git distintos e se comunicam via protocolo HTTP/REST.
 
