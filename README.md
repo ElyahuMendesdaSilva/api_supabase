@@ -167,6 +167,6 @@ Para que o upload de arquivos funcione, é necessário configurar as políticas 
 	source venv/bin/activate
 
 #### 3.3 Instale as dependências
-	git clone <seu-repositorio>
-	cd <pasta-do-projeto>
+	git clone https://github.com/ElyahuMendesdaSilva/api_supabase
+	cd API_TESTER
 	pip install -r requirements.txt  
