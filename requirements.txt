@@ -1,7 +1,8 @@
-fastapi==0.104.1
-uvicorn==0.25.0
-python-dotenv==1.0.0
-supabase==2.1.1
-python-multipart==0.0.6
-httpx==0.26.0  
-httpcore==1.0.2  
+fastapi
+uvicorn
+python-dotenv
+supabase
+python-multipart
+httpx
+httpcore
+aiohttp
