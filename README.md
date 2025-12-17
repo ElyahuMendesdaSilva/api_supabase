@@ -102,8 +102,8 @@ O Frontend possui um sistema de detecção automática de ambiente no arquivo `a
     Bash
     
     ```
-    git clone https://github.com/seu-usuario/nome-do-repo-frontend.git
-    cd nome-do-repo-frontend
+    git clone https://github.com/ElyahuMendesdaSilva/api_supabase
+    cd api_supabase
     ```
     
 2. Executar Localmente:
