@@ -1,6 +1,6 @@
 const API_BASE = window.location.hostname === 'localhost' 
   ? 'http://localhost:8000' 
-  : 'https://api-supabase-back.vercel.app/'; 
+  : 'https://api-supabase-back.onrender.com'; 
 
 const content = document.getElementById("content");
 let currentServices = [];
@@ -785,4 +785,5 @@ function uploadAvatarModal(userId) {
 }
 
 // inicial
+
 renderTab("services");
