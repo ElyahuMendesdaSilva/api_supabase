@@ -1,6 +1,9 @@
-const API_BASE = window.location.hostname === 'localhost' 
+const API_BASE = window.location.hostname.includes('localhost') 
   ? 'http://localhost:8000' 
-  : 'https://api-supabase-back.onrender.com'; 
+  : 'https://api-supabase-back.onrender.com'; // SEU BACKEND NO RENDER
+
+console.log('API Base URL:', API_BASE);
+console.log('Frontend URL:', window.location.origin);
 
 const content = document.getElementById("content");
 let currentServices = [];
@@ -787,3 +790,4 @@ function uploadAvatarModal(userId) {
 // inicial
 
 renderTab("services");
+
